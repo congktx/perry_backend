@@ -1,10 +1,16 @@
 from flask import Flask
+from flask_cors import CORS
 from routes.auth_routes import auth_routes
 
 app = Flask(__name__)
+CORS(app, origins=["*"])
 
 @app.route('/', methods=['GET'])
-def home():
+def get_home():
+    return 'Hello, World!'
+
+@app.route('/', methods=['POST'])
+def post_home():
     return 'Hello, World!'
 
 if __name__ == '__main__':
