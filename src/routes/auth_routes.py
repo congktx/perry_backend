@@ -16,24 +16,17 @@ CORS(auth_routes, origins=["*"])
 @auth_routes.route('/login-gmail', methods=['POST'])
 def login_gmail():
     try:
-        # print(request.json.get('id_token'))
+        print(request.json.get('id_token'))
         token = request.json.get('id_token')
         if not token:
             return jsonify({'error': 'Missing ID token'}), 400
 
         idinfo = id_token.verify_oauth2_token(token, requests.Request(), Config.CLIENT_ID)
+        print(idinfo)
 
-        user_id = idinfo['sub']
-        email = idinfo['email']
-        name = idinfo.get('name')
-        picture = idinfo.get('picture')
+        # {'iss': 'https://accounts.google.com', 'azp': '616106247599-e1671q0gghacqbfp99bsq206bc4ovknc.apps.googleusercontent.com', 'aud': '616106247599-e1671q0gghacqbfp99bsq206bc4ovknc.apps.googleusercontent.com', 'sub': '103044462193221315373', 'email': 'buicongvip@gmail.com', 'email_verified': True, 'nbf': 1746529691, 'name': 'Công Bùi Thành', 'picture': 'https://lh3.googleusercontent.com/a/ACg8ocJjrU_CMI40oFbM2dQ-yfeFlj1i0hz3LY7kwsNF8YNSBid9Kcw=s96-c', 'given_name': 'Công', 'family_name': 'Bùi Thành', 'iat': 1746529991, 'exp': 1746533591, 'jti': 'd4acd36fc97715fbe6e8c7eaac5d18beaf99b9ec'}
 
-        return jsonify({
-            'user_id': user_id,
-            'email': email,
-            'name': name,
-            'picture': picture
-        })
+        return jsonify(idinfo), 200
     except Exception as e:  
         print(e)
         return str(e), 500
